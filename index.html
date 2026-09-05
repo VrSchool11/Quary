@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Quarry</title>
+<meta name="description" content="They took you for what you built, and then they started taking pieces. A stealth platformer about wearing whatever you can tear off.">
+<meta name="theme-color" content="#0d0a16">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d0a16'/%3E%3Crect x='12' y='5' width='8' height='8' fill='%23f7bc7e'/%3E%3Crect x='11' y='14' width='10' height='10' fill='%23e8683d'/%3E%3Crect x='11' y='24' width='4' height='7' fill='%23f7bc7e'/%3E%3Crect x='18' y='24' width='4' height='7' fill='%23f0b845'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Quarry">
+<meta property="og:description" content="Animal limbs are stronger. Human limbs look right. The guards are reading which one you are.">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="style.css?v=1788611487">
+
+<!-- order matters, these share one global scope -->
+<script src="core.js?v=1788611487" defer></script>
+<script src="entities.js?v=1788611487" defer></script>
+<script src="render-ui.js?v=1788611487" defer></script>
+</head>
+<body>
+<div id="wrap"><canvas id="stage"></canvas></div>
+
+<div id="hud">
+  <div class="vitals-corner">
+    <div class="vital-row" id="vital-hum">
+      <span class="vital-glyph">HUM</span>
+      <span class="vital-track"><span class="vital-fill good" id="hum-fill"></span></span>
+      <span class="vital-num" id="hum-num"></span>
+    </div>
+    <div class="vital-row" id="vital-hp">
+      <span class="vital-glyph">HP</span>
+      <span class="vital-track"><span class="vital-fill blood" id="hp-fill"></span></span>
+      <span class="vital-num" id="hp-num"></span>
+    </div>
+    <div class="vital-row" id="vital-gun">
+      <span class="vital-glyph">GUN</span>
+      <span class="ammo" id="ammo"></span>
+      <span class="gun-tag" id="gun-tag"></span>
+    </div>
+    <span class="gun-warn" id="gun-warn">nothing on you that can hold a trigger</span>
+  </div>
+
+  <div class="objective" id="objective"></div>
+  <div class="alarm" id="alarm"><span class="alarm-tick" id="alarm-tick"></span>zone awake</div>
+  <div class="kit" id="kit"></div>
+  <div class="ghost-tally" id="ghost-tally"></div>
+
+  <div class="bossbar" id="bossbar">
+    <span class="boss-track"><span class="boss-fill" id="boss-fill"></span></span>
+    <span class="boss-name" id="boss-name"></span>
+  </div>
+
+  <div id="log"></div>
+  <div class="prompt" id="prompt"></div>
+</div>
+
+<div id="intro" aria-hidden="true">
+  <div class="intro-mote"></div>
+  <p class="intro-card" id="intro-card"></p>
+  <p class="intro-skip">press anything to skip</p>
+</div>
+
+<div id="transition">
+  <div class="tnum num" id="tnum"></div>
+  <div class="tname" id="tname"></div>
+  <div class="trule" id="trule"></div>
+</div>
+
+<div class="overlay" id="pause">
+  <div class="panel panel-hold">
+    <h2>Holding still</h2>
+    <p class="tagline">The fence is not going anywhere.</p>
+    <div class="keycaps">
+      <div class="keycap-row"><kbd>A</kbd><kbd>D</kbd><kbd>Space</kbd><span>Move, jump</span></div>
+      <div class="keycap-row"><kbd>J</kbd><kbd>K</kbd><span>Strike, fire</span></div>
+      <div class="keycap-row"><kbd>E</kbd><kbd>C</kbd><span>Hold to fit, hold to build</span></div>
+      <div class="keycap-row"><kbd>Q</kbd><span>Which side a limb goes on</span></div>
+      <div class="keycap-row"><kbd>M</kbd><span>Sound</span></div>
+      <div class="keycap-row"><kbd>Esc</kbd><span>Back to it</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay on" id="menu">
+  <canvas id="title-canvas" width="320" height="180" aria-hidden="true"></canvas>
+  <div class="panel">
+    <h1 class="title">QUARRY</h1>
+    <p class="tagline">They took you, and you only had one leg.</p>
+    <p class="body">
+      You can attach anything you can tear off. Animal limbs are stronger,
+      human limbs look right, and every guard is reading which one you are.
+      A claw cannot work a trigger.
+    </p>
+
+    <div class="keycaps">
+      <div class="keycap-row"><kbd>A</kbd><kbd>D</kbd><span>Move</span></div>
+      <div class="keycap-row"><kbd>Space</kbd><span>Jump, if you have a leg that can</span></div>
+      <div class="keycap-row"><kbd>J</kbd><span>Strike. From behind, it is quiet</span></div>
+      <div class="keycap-row"><kbd>K</kbd><span>Fire, if you took a gun and kept a hand</span></div>
+      <div class="keycap-row"><kbd>E</kbd><span>Hold to fit a limb you are standing on</span></div>
+      <div class="keycap-row"><kbd>C</kbd><span>Hold to build a can for the gun</span></div>
+      <div class="keycap-row"><kbd>Q</kbd><span>Which side it goes on</span></div>
+      <div class="keycap-row"><kbd>M</kbd><span>Sound</span></div>
+      <div class="keycap-row"><kbd>Esc</kbd><span>Pause</span></div>
+    </div>
+
+    <p class="needs-keys">This one needs a keyboard.<br>Open it on a laptop or desktop.</p>
+    <button class="btn" id="btn-start">Get up</button>
+    <p class="foot">leave a zone without being seen and you get some of yourself back</p>
+  </div>
+</div>
+
+<div class="overlay" id="gameover">
+  <div class="panel panel-file">
+    <div class="file-head">
+      <h2 class="go-title" id="go-title"></h2>
+      <p class="tagline" id="go-sub"></p>
+    </div>
+
+    <div class="file-body">
+      <figure class="mugshot">
+        <canvas id="go-portrait" width="56" height="58" aria-hidden="true"></canvas>
+        <figcaption id="go-kit"></figcaption>
+      </figure>
+
+      <div class="reading">
+        <div class="scale">
+          <div class="scale-read">
+            <b id="hum-big"></b>
+            <span id="hum-tier"></span>
+          </div>
+          <div class="scale-bar">
+            <div class="segs">
+              <span class="seg danger"></span>
+              <span class="seg warn"></span>
+              <span class="seg good"></span>
+            </div>
+            <span class="needle" id="hum-needle"></span>
+          </div>
+          <div class="scale-marks"><span>0</span><span>40</span><span>76</span><span>100</span></div>
+        </div>
+        <dl class="ledger" id="go-summary"></dl>
+      </div>
+    </div>
+
+    <p class="go-note" id="go-note"></p>
+    <div class="go-buttons">
+      <button class="btn" id="btn-resume-cp">Back to the fence</button>
+      <button class="btn ghost" id="btn-retry">Start again</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
