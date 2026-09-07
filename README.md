@@ -3,7 +3,7 @@ A fun 2d retro game where you have been kidnapped and your limbs have been cut o
 
 Links:
 Github Repo: https://github.com/VrSchool11/Quary
-Playable Website: 
+Playable Website: https://vrschool11.github.io/Quary/
 
 Controls:
 
