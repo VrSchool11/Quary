@@ -147,28 +147,28 @@ function stairs(x, n, w = 72, gap = 16) {
 }
 const LIMBS = {
   human_leg: { kind: 'leg', name: 'human leg', hum: +15, jump: 1.0, speed: 1.0, noise: 0.45 },
-  boot_leg: { kind: 'leg', name: "guard's boot", hum: +18, jump: 1.0, speed: 1.05, noise: 1.0 },
+  boot_leg: { kind: 'leg', name: 'guards boot', hum: +18, jump: 1.0, speed: 1.05, noise: 1.0 },
   plate_leg: { kind: 'leg', name: 'armoured leg', hum: +20, jump: 0.88, speed: 0.9, noise: 1.2 },
-  jag_leg: { kind: 'leg', name: 'jaguar haunch', hum: -20, jump: 1.48, speed: 1.22, noise: 0.08 },
+  jag_leg: { kind: 'leg', name: 'jaguar leg', hum: -20, jump: 1.48, speed: 1.22, noise: 0.08 },
   frog_leg: { kind: 'leg', name: 'frog leg', hum: -14, jump: 1.22, speed: 0.95, noise: 0.85 },
   croc_leg: { kind: 'leg', name: 'crocodile leg', hum: -24, jump: 0.62, speed: 0.82, noise: 0.3 },
   own_leg: { kind: 'leg', name: 'your own leg', hum: +30, jump: 0.7, speed: 0.7, noise: 0.55 },
   human_arm: { kind: 'arm', name: 'human arm', hum: +15, dmg: 1, reach: 11, grip: true },
-  officer_arm: { kind: 'arm', name: "officer's arm", hum: +22, dmg: 2, reach: 12, grip: true },
-  claw_arm: { kind: 'arm', name: 'jaguar claw', hum: -20, dmg: 3, reach: 14 },
-  jaw_arm: { kind: 'arm', name: 'crocodile jaw', hum: -24, dmg: 2, reach: 12 },
+  officer_arm: { kind: 'arm', name: 'officers arm', hum: +22, dmg: 2, reach: 12, grip: true },
+  claw_arm: { kind: 'arm', name: 'jaguar arm', hum: -20, dmg: 3, reach: 14 },
+  jaw_arm: { kind: 'arm', name: 'crocodile arm', hum: -24, dmg: 2, reach: 12 },
   ape_arm: { kind: 'arm', name: 'ape arm', hum: -18, dmg: 2, reach: 17 },
 };
 
 const EMPTY_SOCKET_HUM = -3;
 
 const GEAR = {
-  gun: { name: "guard's sidearm", hold: true },
-  rounds: { name: 'a spare magazine', mags: 1 },
+  gun: { name: 'guards sidearm', hold: true },
+  rounds: { name: 'a spare mag', mags: 1 },
 
-  sleeve: { name: 'a length of steel sleeve' },
-  spring: { name: 'a stripped spring' },
-  rag: { name: 'an oiled rag' },
+  sleeve: { name: 'a steel sleeve' },
+  spring: { name: 'a spring' },
+  rag: { name: 'a rag' },
 };
 const CAN_PARTS = ['sleeve', 'spring', 'rag'];
 const ENEMY_TYPES = {
@@ -204,7 +204,7 @@ const ENEMY_TYPES = {
     speed: 0.6,
     dmg: 2,
     sight: 1.0,
-    name: "the king's own",
+    name: 'kings guard',
     drop: ['plate_leg'],
     armour: true,
 
@@ -245,15 +245,15 @@ const ENEMY_TYPES = {
 };
 
 const KING_LINES = {
-  enter: 'You were supposed to be useful.',
+  enter: 'You were useful once.',
   turn(hum) {
-    if (hum < 45) return 'Look what you made of yourself. I only took the leg.';
-    return 'Still wearing your own face. Sentimental.';
+    if (hum < 45) return 'Look at yourself. And I only took one leg.';
+    return 'Still got your own face. Thats sentimental of you.';
   },
 
-  grab: 'That one was never yours.',
-  miss: 'Hold still.',
-  die: 'Take it back. It never worked properly anyway.',
+  grab: 'That wasnt yours to keep.',
+  miss: 'Stand still.',
+  die: 'Take it back then. Never worked right anyway.',
 };
 const KING_PHASES = [
   { above: 20, speed: 0.85, moves: ['call', 'volley'] },
@@ -281,7 +281,7 @@ function leafBurst(x, y, n) {
 const ZONES = [
   {
     name: 'The Block',
-    rule: 'no cover. learn the loop.',
+    rule: 'no cover here, learn the guard patterns',
     ease: 0.5,
     w: 1240,
     exit: 1210,
@@ -303,13 +303,13 @@ const ZONES = [
       { t: 'guard', x: 800, x0: 740, x1: 880 },
     ],
     notes: [
-      { x: 210, text: 'They kept asking for the notation. I gave them the wrong one twice.' },
-      { x: 980, text: 'Third door. The lock is on the outside of every room in here.' },
+      { x: 210, text: 'They wanted to know how I built it. I told them nothing twice.' },
+      { x: 980, text: 'Every door here locks from the outside.' },
     ],
   },
   {
     name: 'Undergrowth',
-    rule: 'the ferns hide you. so does everything else.',
+    rule: 'ferns hide you from the guards',
     ease: 0.75,
     w: 1520,
     exit: 1490,
@@ -340,13 +340,13 @@ const ZONES = [
       { t: 'commander', x: 1150, x0: 1090, x1: 1250 },
     ],
     notes: [
-      { x: 150, text: 'Out. Through the laundry gate. My leg is somewhere behind me.' },
-      { x: 1300, text: 'The cat took a guard last night. Nobody came for the body.' },
+      { x: 150, text: 'Got out through the laundry gate. My leg is back there somewhere.' },
+      { x: 1300, text: 'A jaguar got a guard last night. Nobody went looking for him.' },
     ],
   },
   {
     name: 'The Yard',
-    rule: 'floodlit ground. they see twice as far.',
+    rule: 'floodlights let guards see further',
     ease: 1.0,
     w: 1520,
     exit: 1490,
@@ -382,13 +382,13 @@ const ZONES = [
       { t: 'guard', x: 1200, x0: 1140, x1: 1300 },
     ],
     notes: [
-      { x: 520, text: 'Sleeve, spring, rag. I have built worse things out of less.' },
-      { x: 1320, text: 'A commander has a radio. A dead commander has a radio too.' },
+      { x: 520, text: 'Sleeve, spring, rag. Ive built worse with less.' },
+      { x: 1320, text: 'Kill the commander before he reaches the radio.' },
     ],
   },
   {
     name: 'The Ridge',
-    rule: 'straight up. your legs decide this one.',
+    rule: 'you need good legs to make the jumps',
     ease: 1.2,
     w: 1400,
     exit: 1370,
@@ -427,13 +427,13 @@ const ZONES = [
       { t: 'guard', x: 1100, x0: 1040, x1: 1180 },
     ],
     notes: [
-      { x: 260, text: 'Above the lights there is no one. They never look up.' },
-      { x: 1180, text: 'The big one does not patrol. He waits where the king walks.' },
+      { x: 260, text: 'Nobody looks up here. Stay above the lights.' },
+      { x: 1180, text: 'The big guard doesnt patrol, he just waits near the king.' },
     ],
   },
   {
-    name: 'The Treeline',
-    rule: 'he is waiting at the fence.',
+    name: 'The Limb',
+    rule: 'your limb is at the end',
     ease: 1.4,
     w: 1240,
     exit: 1200,
@@ -467,15 +467,15 @@ const ZONES = [
       { t: 'commander', x: 740, x0: 700, x1: 820 },
     ],
     notes: [
-      { x: 200, text: 'Trees. Actual trees. I have not seen anything I did not build in a year.' },
+      { x: 200, text: 'First trees Ive seen in a year that I didnt build myself.' },
     ],
   },
 ];
 const INTRO_CARDS = [
   'I made something. They took it.',
-  'I would not explain how. They took the leg.',
-  'There was nothing left. I ran.',
-  'Out of the room. Still in the fence.',
+  'I would not explain how. They took my leg.',
+  'There was nothing left. I escaped.',
+  'Out of the room. Still in the territory.',
 ];
 
 let platforms = [],
