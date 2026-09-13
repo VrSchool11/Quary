@@ -9,7 +9,7 @@
     <title>Quarry</title>
     <meta
       name="description"
-      content="They took you for what you built, and then they started taking pieces. A stealth platformer about wearing whatever you can tear off."
+      content="Escape a compound where they cut off your limbs. Take legs and arms off dead guards and animals to move, fight and get out."
     />
     <meta name="theme-color" content="#0d0a16" />
     <link
@@ -21,7 +21,7 @@
     <meta property="og:title" content="Quarry" />
     <meta
       property="og:description"
-      content="Animal limbs are stronger. Human limbs look right. The guards are reading which one you are."
+      content="Animal limbs make you stronger. Human limbs make you look normal. Guards can tell the difference."
     />
     <meta name="twitter:card" content="summary" />
     <style>
@@ -725,28 +725,28 @@ function stairs(x, n, w = 72, gap = 16) {
 }
 const LIMBS = {
   human_leg: { kind: 'leg', name: 'human leg', hum: +15, jump: 1.0, speed: 1.0, noise: 0.45 },
-  boot_leg: { kind: 'leg', name: "guard's boot", hum: +18, jump: 1.0, speed: 1.05, noise: 1.0 },
+  boot_leg: { kind: 'leg', name: 'guards boot', hum: +18, jump: 1.0, speed: 1.05, noise: 1.0 },
   plate_leg: { kind: 'leg', name: 'armoured leg', hum: +20, jump: 0.88, speed: 0.9, noise: 1.2 },
-  jag_leg: { kind: 'leg', name: 'jaguar haunch', hum: -20, jump: 1.48, speed: 1.22, noise: 0.08 },
+  jag_leg: { kind: 'leg', name: 'jaguar leg', hum: -20, jump: 1.48, speed: 1.22, noise: 0.08 },
   frog_leg: { kind: 'leg', name: 'frog leg', hum: -14, jump: 1.22, speed: 0.95, noise: 0.85 },
   croc_leg: { kind: 'leg', name: 'crocodile leg', hum: -24, jump: 0.62, speed: 0.82, noise: 0.3 },
   own_leg: { kind: 'leg', name: 'your own leg', hum: +30, jump: 0.7, speed: 0.7, noise: 0.55 },
   human_arm: { kind: 'arm', name: 'human arm', hum: +15, dmg: 1, reach: 11, grip: true },
-  officer_arm: { kind: 'arm', name: "officer's arm", hum: +22, dmg: 2, reach: 12, grip: true },
-  claw_arm: { kind: 'arm', name: 'jaguar claw', hum: -20, dmg: 3, reach: 14 },
-  jaw_arm: { kind: 'arm', name: 'crocodile jaw', hum: -24, dmg: 2, reach: 12 },
+  officer_arm: { kind: 'arm', name: 'officers arm', hum: +22, dmg: 2, reach: 12, grip: true },
+  claw_arm: { kind: 'arm', name: 'jaguar arm', hum: -20, dmg: 3, reach: 14 },
+  jaw_arm: { kind: 'arm', name: 'crocodile arm', hum: -24, dmg: 2, reach: 12 },
   ape_arm: { kind: 'arm', name: 'ape arm', hum: -18, dmg: 2, reach: 17 },
 };
 
 const EMPTY_SOCKET_HUM = -3;
 
 const GEAR = {
-  gun: { name: "guard's sidearm", hold: true },
-  rounds: { name: 'a spare magazine', mags: 1 },
+  gun: { name: 'guards sidearm', hold: true },
+  rounds: { name: 'a spare mag', mags: 1 },
 
-  sleeve: { name: 'a length of steel sleeve' },
-  spring: { name: 'a stripped spring' },
-  rag: { name: 'an oiled rag' },
+  sleeve: { name: 'a steel sleeve' },
+  spring: { name: 'a spring' },
+  rag: { name: 'a rag' },
 };
 const CAN_PARTS = ['sleeve', 'spring', 'rag'];
 const ENEMY_TYPES = {
@@ -782,7 +782,7 @@ const ENEMY_TYPES = {
     speed: 0.6,
     dmg: 2,
     sight: 1.0,
-    name: "the king's own",
+    name: 'kings guard',
     drop: ['plate_leg'],
     armour: true,
 
@@ -823,15 +823,15 @@ const ENEMY_TYPES = {
 };
 
 const KING_LINES = {
-  enter: 'You were supposed to be useful.',
+  enter: 'You were useful once.',
   turn(hum) {
-    if (hum < 45) return 'Look what you made of yourself. I only took the leg.';
-    return 'Still wearing your own face. Sentimental.';
+    if (hum < 45) return 'Look at yourself. And I only took one leg.';
+    return 'Still got your own face. Thats sentimental of you.';
   },
 
-  grab: 'That one was never yours.',
-  miss: 'Hold still.',
-  die: 'Take it back. It never worked properly anyway.',
+  grab: 'That wasnt yours to keep.',
+  miss: 'Stand still.',
+  die: 'Take it back then. Never worked right anyway.',
 };
 const KING_PHASES = [
   { above: 20, speed: 0.85, moves: ['call', 'volley'] },
@@ -859,7 +859,7 @@ function leafBurst(x, y, n) {
 const ZONES = [
   {
     name: 'The Block',
-    rule: 'no cover. learn the loop.',
+    rule: 'no cover here, learn the guard patterns',
     ease: 0.5,
     w: 1240,
     exit: 1210,
@@ -881,13 +881,13 @@ const ZONES = [
       { t: 'guard', x: 800, x0: 740, x1: 880 },
     ],
     notes: [
-      { x: 210, text: 'They kept asking for the notation. I gave them the wrong one twice.' },
-      { x: 980, text: 'Third door. The lock is on the outside of every room in here.' },
+      { x: 210, text: 'They wanted to know how I built it. I told them nothing twice.' },
+      { x: 980, text: 'Every door here locks from the outside.' },
     ],
   },
   {
     name: 'Undergrowth',
-    rule: 'the ferns hide you. so does everything else.',
+    rule: 'ferns hide you from the guards',
     ease: 0.75,
     w: 1520,
     exit: 1490,
@@ -918,13 +918,13 @@ const ZONES = [
       { t: 'commander', x: 1150, x0: 1090, x1: 1250 },
     ],
     notes: [
-      { x: 150, text: 'Out. Through the laundry gate. My leg is somewhere behind me.' },
-      { x: 1300, text: 'The cat took a guard last night. Nobody came for the body.' },
+      { x: 150, text: 'Got out through the laundry gate. My leg is back there somewhere.' },
+      { x: 1300, text: 'A jaguar got a guard last night. Nobody went looking for him.' },
     ],
   },
   {
     name: 'The Yard',
-    rule: 'floodlit ground. they see twice as far.',
+    rule: 'floodlights let guards see further',
     ease: 1.0,
     w: 1520,
     exit: 1490,
@@ -960,13 +960,13 @@ const ZONES = [
       { t: 'guard', x: 1200, x0: 1140, x1: 1300 },
     ],
     notes: [
-      { x: 520, text: 'Sleeve, spring, rag. I have built worse things out of less.' },
-      { x: 1320, text: 'A commander has a radio. A dead commander has a radio too.' },
+      { x: 520, text: 'Sleeve, spring, rag. Ive built worse with less.' },
+      { x: 1320, text: 'Kill the commander before he reaches the radio.' },
     ],
   },
   {
     name: 'The Ridge',
-    rule: 'straight up. your legs decide this one.',
+    rule: 'you need good legs to make the jumps',
     ease: 1.2,
     w: 1400,
     exit: 1370,
@@ -1005,13 +1005,13 @@ const ZONES = [
       { t: 'guard', x: 1100, x0: 1040, x1: 1180 },
     ],
     notes: [
-      { x: 260, text: 'Above the lights there is no one. They never look up.' },
-      { x: 1180, text: 'The big one does not patrol. He waits where the king walks.' },
+      { x: 260, text: 'Nobody looks up here. Stay above the lights.' },
+      { x: 1180, text: 'The big guard doesnt patrol, he just waits near the king.' },
     ],
   },
   {
-    name: 'The Treeline',
-    rule: 'he is waiting at the fence.',
+    name: 'The Limb',
+    rule: 'your limb is at the end',
     ease: 1.4,
     w: 1240,
     exit: 1200,
@@ -1045,15 +1045,15 @@ const ZONES = [
       { t: 'commander', x: 740, x0: 700, x1: 820 },
     ],
     notes: [
-      { x: 200, text: 'Trees. Actual trees. I have not seen anything I did not build in a year.' },
+      { x: 200, text: 'First trees Ive seen in a year that I didnt build myself.' },
     ],
   },
 ];
 const INTRO_CARDS = [
   'I made something. They took it.',
-  'I would not explain how. They took the leg.',
-  'There was nothing left. I ran.',
-  'Out of the room. Still in the fence.',
+  'I would not explain how. They took my leg.',
+  'There was nothing left. I escaped.',
+  'Out of the room. Still in the territory.',
 ];
 
 let platforms = [],
@@ -1482,7 +1482,7 @@ function advanceZone() {
     game.ghosted.push(ZONES[game.zone].name);
     game.player.hp = Math.min(game.player.hpMax, game.player.hp + CONFIG.UNSEEN_HEAL);
     audio.unseen();
-    logLine('<b>nobody saw you leave.</b> you got some of yourself back.');
+    logLine('<b>left without being seen.</b> got some of yourself back.');
   }
   if (game.zone + 1 >= ZONES.length) {
     endRun(true);
@@ -1608,7 +1608,7 @@ function stepGame() {
       game.freeze = 8;
       audio.unseen();
       logLine(
-        '<b>a can, out of a sleeve and a spring and a rag.</b> it will not last many shots. it does not have to.',
+        '<b>built a silencer</b> out of the sleeve, spring and rag. wont last long, doesnt need to.',
       );
     }
   } else {
@@ -1676,7 +1676,7 @@ function stepGame() {
       game.huntTimer = 0;
       game.huntCount = 0;
 
-      logLine('the shouting stops. they are drifting back to their posts.');
+      logLine('alarms died down. guards going back to their posts.');
     }
   }
 
@@ -1689,7 +1689,7 @@ function stepGame() {
 
       game.enemies.push(chaser);
       game.huntCount++;
-      logLine('someone else is coming up the line.');
+      logLine('another guard coming up the line.');
     }
   }
 
@@ -1808,7 +1808,7 @@ class Player extends Actor {
     this.ammo = CONFIG.MAG_SIZE;
     audio.clang();
     emitNoise(this.x, this.y, 0.3);
-    logLine('fresh mag. ' + this.mags + ' left.');
+    logLine('reloaded. ' + this.mags + ' mags left.');
   }
   shoot() {
     this.shot = TUNE.SHOT_LOCK;
@@ -1959,7 +1959,7 @@ class Player extends Actor {
       this.x = Math.max(20, back);
       this.y = GROUND;
       this.vy = 0;
-      logLine('you went down into the cut and dragged yourself out.');
+      logLine('fell into the gap and climbed back out.');
       dustBurst(this.x, this.y, 10, 14);
 
       this.hurt(1);
@@ -2274,7 +2274,7 @@ class Enemy extends Actor {
 
         audio.alarm();
         logLine(
-          '<b>the commander reached a radio.</b> break their line of sight and it dies down.',
+          '<b>commander reached the radio.</b> break line of sight to stop it.',
         );
       }
       return;
@@ -2292,13 +2292,13 @@ function humanity(p) {
 const TUTORIAL = [
   {
     key: 'move',
-    text: 'A   D   to drag yourself  ·  SPACE  to hop  ·  ESC pause',
+    text: 'A   D   to move around  ·  SPACE  to jump  ·  ESC pause',
     near: () => true,
     done: p => p.hops >= 1 || p.x > 88 || game.fitted >= 1,
   },
   {
     key: 'take',
-    text: 'HOLD  E   to take the leg',
+    text: 'HOLD  E   to attach the leg',
     near: p => game.pickups.some(u => !u.taken && Math.abs(u.x - p.x) < 110),
     done: () => game.fitted >= 1,
   },
@@ -2310,21 +2310,21 @@ const TUTORIAL = [
   },
   {
     key: 'jump',
-    text: 'two legs now  ·  SPACE reaches the ledge',
+    text: 'two legs now  ·  you can jump onto the ledge',
     near: () => game.fitted >= 1,
 
     done: p => p.y < GROUND - 16,
   },
   {
     key: 'kill',
-    text: 'get behind him, then  J  ·  from behind it is quiet',
+    text: 'get behind him, then  J  ·  attack him',
     near: p =>
       game.enemies.some(f => f.alive && !ENEMY_TYPES[f.type].beast && Math.abs(f.x - p.x) < 120),
     done: () => game.kills >= 1,
   },
   {
     key: 'read',
-    text: 'HUM, bottom left  ·  that is how human you read  ·  low and they look twice as hard',
+    text: 'HUM, bottom left  ·  that is how guards perceive you  ·  low and they look becomed alerted quicker',
 
     near: p => humanity(p) < 72,
     done: (p, seen) => seen > 260,
@@ -2332,19 +2332,19 @@ const TUTORIAL = [
 
   {
     key: 'gun',
-    text: 'K  fires it  ·  bare, the shot carries the whole zone',
+    text: 'K  fires it',
     near: p => canFire(p) && (p.ammo > 0 || p.mags > 0),
     done: p => p.fired >= 1,
   },
   {
     key: 'can',
-    text: 'sleeve, spring, rag  ·  HOLD C  ·  then it is quiet',
+    text: 'sleeve, spring, rag  ·  HOLD C  ·  then it is silenced',
     near: p => p.canParts.length === CAN_PARTS.length && !p.silencer,
     done: p => p.silencer,
   },
   {
     key: 'cool',
-    text: 'get out of their eyeline and hold  ·  the alarm burns itself out',
+    text: 'get out of their eyeline and hide they will forget about it',
     near: () => game.alarm > 0,
     done: () => game.alarm === 0,
   },
@@ -2609,7 +2609,7 @@ function runKingMove(K, p, ph) {
       if (standing < CONFIG.FENCE_MAX) {
         spawnGuard(900, 1);
         spawnGuard(CONFIG.KING_WALL, -1);
-        logLine('two more from the fence line.');
+        logLine('two more guards coming from the fence.');
       }
       endKingMove(K, TUNE.CD_CALL);
       return;
@@ -2625,16 +2625,16 @@ function takeGear(p, u) {
     p.gun = true;
     p.mags = Math.max(p.mags, 1);
     p.ammo = Math.max(p.ammo, 3);
-    logLine('<b>his sidearm.</b> three rounds in the mag. K fires.');
+    logLine('<b>took his sidearm.</b> three rounds left. K to fire.');
   } else if (u.gear === 'rounds') {
     const got = u.mags || 1;
     p.mags = Math.min(CONFIG.MAGS_MAX, p.mags + got);
-    logLine(got > 1 ? 'two mags off him.' : 'a mag off him.');
+    logLine(got > 1 ? 'got two mags off him.' : 'got a mag off him.');
   } else {
     p.canParts.push(u.gear);
     logLine(
       p.canParts.length === CAN_PARTS.length
-        ? '<b>' + gearDef.name + '.</b> that is all three. hold C.'
+        ? '<b>' + gearDef.name + '.</b> thats all three, hold C.'
         : gearDef.name + '. ' + p.canParts.length + ' of ' + CAN_PARTS.length + '.',
     );
   }
@@ -3723,9 +3723,9 @@ function drawLimb(id, x, y, sw, dir) {
   art(x, y, sw, dir);
 }
 const HUM_TIERS = [
-  { min: 76, cls: 'good', line: 'they see one of their own' },
-  { min: 40, cls: 'warn', line: 'something is off about you' },
-  { min: 0, cls: 'danger', line: 'shoot on sight' },
+  { min: 76, cls: 'good', line: 'a normal human' },
+  { min: 40, cls: 'warn', line: 'A potentail hazard' },
+  { min: 0, cls: 'danger', line: 'Bialogical Harzad' },
 ];
 let cacheKit = '',
   cacheGun = '',
@@ -3748,24 +3748,24 @@ function introFrame() {
 function endNote(won, hum, mark) {
   const p = game.player;
   if (!won && game.quietKills === 0 && game.kills > 0)
-    return 'You fought them from the front every time. Get behind them.';
-  if (!won && !p.fernFrames) return 'You never used the ferns. They cannot see you in there.';
-  if (!won) return 'Closer than last time counts for something.';
+    return 'You fought them head on every time. Try getting behind them.';
+  if (!won && !p.fernFrames) return 'Never used the ferns. Guards cant see you in there.';
+  if (!won) return 'Closer this time. Try again.';
   if (!game.ghosted.length)
-    return 'You were seen in every zone. Try slipping one of them entirely.';
-  if (game.fitted < 3) return `There are limbs out there. You fitted ${game.fitted}.`;
-  if (hum < 40) return 'Now try getting out with more of yourself left.';
+    return 'Guards spotted you in every zone. Try slipping through one clean.';
+  if (game.fitted < 3) return `There are more limbs out there. You only fitted ${game.fitted}.`;
+  if (hum < 40) return 'Try coming out with more of yourself intact.';
   if (mark.faster && mark.prev)
-    return `${mark.prev.secs - mark.secs} seconds off your own record. Again.`;
-  if (mark.prev) return `Your quickest way out is still ${mark.prev.secs} seconds. Beat that.`;
+    return `${mark.prev.secs - mark.secs} seconds faster than last time.`;
+  if (mark.prev) return `Fastest so far is ${mark.prev.secs} seconds. Beat it.`;
   return 'Now do it faster.';
 }
 function escapeRank(hum) {
-  if (hum >= 85) return 'Still yourself';
+  if (hum >= 85) return 'Still you';
   if (hum >= 60) return 'Mostly you';
-  if (hum >= 35) return 'Something in between';
+  if (hum >= 35) return 'Not fully you';
 
-  return 'Not a person any more';
+  return 'Barely you';
 }
 
 function endRun(won) {
@@ -3798,11 +3798,11 @@ function endRun(won) {
   title.className = 'go-title ' + tier.cls;
   $('go-sub').textContent = won
     ? hum > 75
-      ? 'You walked out of the trees looking like yourself.'
+      ? 'You made it out looking like yourself.'
       : hum >= 40
-        ? 'Whatever walked out was mostly you.'
-        : 'Something got out. It used to have your name.'
-    : 'They drag you back, and they take the parts that were theirs.';
+        ? 'Mostly you walked out.'
+        : 'Something walked out. It used to be you.'
+    : 'They dragged you back and took what was theirs.';
   renderer.paintPortrait($('go-portrait'));
 
   const nm = id => (id ? LIMBS[id].name : 'nothing');
@@ -3820,42 +3820,42 @@ function endRun(won) {
     'Ended',
     won
       ? 'past the fence'
-      : `in ${ZONES[game.zone].name}, ${Math.round((game.player.x / zoneExit) * 100)}% of the way`,
+      : `in ${ZONES[game.zone].name}, ${Math.round((game.player.x / zoneExit) * 100)}% of the way through`,
   ]);
   rows.push(['Limbs fitted', String(game.fitted)]);
   rows.push([
     'Left unseen',
-    game.ghosted.length ? `${game.ghosted.length} of ${ZONES.length} zones` : 'seen in every zone',
+    game.ghosted.length ? `${game.ghosted.length} of ${ZONES.length} zones` : 'seen every time',
   ]);
   rows.push([
     'Killed',
     game.kills
       ? game.kills + (game.quietKills ? ` — ${game.quietKills} from behind` : '')
-      : 'nobody',
+      : 'none',
   ]);
   if (game.player.gun) {
     rows.push([
       'Rounds spent',
-      game.player.fired + (game.player.silencer ? ' through a can' : ', all of them heard'),
+      game.player.fired + (game.player.silencer ? ' through a silencer' : ', all of them loud'),
     ]);
   }
-  rows.push(['Took', secs + ' seconds' + (faster && prev ? ' — quickest yet' : '')]);
+  rows.push(['Took', secs + ' seconds' + (faster && prev ? ' — fastest yet' : '')]);
   if (better) {
-    rows.push(['Best escape', Math.round(hum) + ' — your best yet']);
+    rows.push(['Best escape', Math.round(hum) + ' — new best']);
   } else if (prev) {
-    rows.push(['Best escape', prev.hum + ' — still your record']);
+    rows.push(['Best escape', prev.hum + ' — still your best']);
   }
 
   $('go-summary').innerHTML = rows
     .map(
       ([k, v]) =>
-        `<dt>${k}</dt><dd${/nobody|every zone/.test(v) ? ' class="quiet"' : ''}>${v}</dd>`,
+        `<dt>${k}</dt><dd${/none|every time/.test(v) ? ' class="quiet"' : ''}>${v}</dd>`,
     )
     .join('');
   $('go-note').textContent = endNote(won, hum, { prev, secs, faster });
   const resume = $('btn-resume-cp');
   if (!won && game.checkpoint) {
-    resume.textContent = 'Back to ' + ZONES[game.checkpoint.zone].name;
+    resume.textContent = 'Continue at ' + ZONES[game.checkpoint.zone].name;
     resume.style.display = '';
   } else {
     resume.style.display = 'none';
@@ -3884,18 +3884,14 @@ function shade(hex, f) {
 }
 
 const TIPS = [
-  'stand in the ferns. they stop looking.',
-  'guards carry mags. jaguars do not.',
-  'strike from behind and nobody hears it',
-  '<b>Q</b> swaps the side a limb goes on before you fit it',
-  'five rounds a mag. <b>K</b> again swaps a fresh one in.',
+  'stand in the ferns. they cant see it.',
+  'attack from behind to prevent guard being alterted',
+  '<b>Q</b> swaps the side a limb attaches to',
+  'five rounds a mag',
   'the alarm dies down once you are out of sight',
-  'he only opens up mid-swing. before that you are chipping.',
-  'frog legs get you up to the ledge. they also get you looked at.',
-  'sleeve, spring, rag, then hold <b>C</b>',
-  'the floodlights in the yard reach about twice as far',
-  'every lock in here is on the outside of the door',
-  'you need a human hand to fire the gun',
+  'frog legs give you better jump but cause guard to be more alerted',
+  'sleeve, spring, rag, then hold <b>C</b> to make a silencer',
+  'you need a human limb to fire the gun',
 ];
 let cacheSector = '',
   tipBag = [],
@@ -3962,10 +3958,10 @@ function updateHud() {
       }).join('');
       const tag = $('gun-tag');
       if (p.silencer) {
-        tag.textContent = 'canned';
+        tag.textContent = 'silenced';
         tag.className = 'gun-tag quiet';
       } else {
-        tag.textContent = 'bare';
+        tag.textContent = 'Loud';
         tag.className = 'gun-tag';
       }
     }
@@ -4190,8 +4186,8 @@ window.addEventListener('DOMContentLoaded', () => {
     </div>
     <div class="overlay" id="pause">
       <div class="panel panel-hold">
-        <h2>Holding still</h2>
-        <p class="tagline">The fence is not going anywhere.</p>
+        <h2>Resting</h2>
+        <p class="tagline">It's Not too far now</p>
         <div class="keycaps">
           <div class="keycap-row">
             <kbd>A</kbd><kbd>D</kbd><kbd>Space</kbd><span>Move, jump</span>
@@ -4211,33 +4207,37 @@ window.addEventListener('DOMContentLoaded', () => {
       <canvas id="title-canvas" width="320" height="180" aria-hidden="true"></canvas>
       <div class="panel">
         <h1 class="title">QUARRY</h1>
-        <p class="tagline">They took you, and you only had one leg.</p>
+        <p class="tagline">They took you</p>
         <p class="body">
-          You can attach anything you can tear off. Animal limbs are stronger, human limbs look
-          right, and every guard is reading which one you are. A claw cannot work a trigger.
+          You can attach any limbs you find, animal parts a better but human parts make guards
+          less suspicious. you cannot use an animal limb to carry or fire a gun
         </p>
         <div class="keycaps">
-          <div class="keycap-row"><kbd>A</kbd><kbd>D</kbd><span>Move</span></div>
+          <div class="keycap-row"><kbd>A</kbd><kbd>D</kbd><span>Movement</span></div>
           <div class="keycap-row">
-            <kbd>Space</kbd><span>Jump, if you have a leg that can</span>
+            <kbd>Space</kbd><span>Jump(ps. some legs cant jump)</span>
           </div>
 
-          <div class="keycap-row"><kbd>J</kbd><span>Strike. From behind, it is quiet</span></div>
+          <div class="keycap-row"><kbd>J</kbd><span>Strike.</span></div>
           <div class="keycap-row">
-            <kbd>K</kbd><span>Fire, if you took a gun and kept a hand</span>
+            <kbd>K</kbd><span>Fire</span>
           </div>
           <div class="keycap-row">
-            <kbd>E</kbd><span>Hold to fit a limb you are standing on</span>
+            <kbd>E</kbd><span>Hold to fit a limb thats nearby</span>
           </div>
-          <div class="keycap-row"><kbd>C</kbd><span>Hold to build a can for the gun</span></div>
-          <div class="keycap-row"><kbd>Q</kbd><span>Which side it goes on</span></div>
+          <div class="keycap-row">
+            <kbd>C</kbd><span>Hold to build a makeshift silencer once all parts are collected</span>
+          </div>
+          <div class="keycap-row"><kbd>Q</kbd><span>Which side limb ataches to</span></div>
           <div class="keycap-row"><kbd>M</kbd><span>Sound</span></div>
           <div class="keycap-row"><kbd>Esc</kbd><span>Pause</span></div>
         </div>
         <!-- keep -->
         <p class="needs-keys">This one needs a keyboard.<br />Open it on a laptop or desktop.</p>
-        <button class="btn" id="btn-start">Get up</button>
-        <p class="foot">leave a zone without being seen and you get some of yourself back</p>
+        <button class="btn" id="btn-start">Escape</button>
+        <p class="foot">
+          Fight your way through the guards towards the king and collect your own leg back
+        </p>
       </div>
     </div>
 
@@ -4276,8 +4276,8 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
         <p class="go-note" id="go-note"></p>
         <div class="go-buttons">
-          <button class="btn" id="btn-resume-cp">Back to the fence</button>
-          <button class="btn ghost" id="btn-retry">Start again</button>
+          <button class="btn" id="btn-resume-cp">Continue</button>
+          <button class="btn ghost" id="btn-retry">Retry</button>
         </div>
       </div>
     </div>
