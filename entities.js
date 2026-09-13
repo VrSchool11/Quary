@@ -72,7 +72,7 @@ function advanceZone() {
     game.ghosted.push(ZONES[game.zone].name);
     game.player.hp = Math.min(game.player.hpMax, game.player.hp + CONFIG.UNSEEN_HEAL);
     audio.unseen();
-    logLine('<b>nobody saw you leave.</b> you got some of yourself back.');
+    logLine('<b>left without being seen.</b> got some of yourself back.');
   }
   if (game.zone + 1 >= ZONES.length) {
     endRun(true);
@@ -198,7 +198,7 @@ function stepGame() {
       game.freeze = 8;
       audio.unseen();
       logLine(
-        '<b>a can, out of a sleeve and a spring and a rag.</b> it will not last many shots. it does not have to.',
+        '<b>built a silencer</b> out of the sleeve, spring and rag. wont last long, doesnt need to.',
       );
     }
   } else {
@@ -266,7 +266,7 @@ function stepGame() {
       game.huntTimer = 0;
       game.huntCount = 0;
 
-      logLine('the shouting stops. they are drifting back to their posts.');
+      logLine('alarms died down. guards going back to their posts.');
     }
   }
 
@@ -279,7 +279,7 @@ function stepGame() {
 
       game.enemies.push(chaser);
       game.huntCount++;
-      logLine('someone else is coming up the line.');
+      logLine('another guard coming up the line.');
     }
   }
 
@@ -398,7 +398,7 @@ class Player extends Actor {
     this.ammo = CONFIG.MAG_SIZE;
     audio.clang();
     emitNoise(this.x, this.y, 0.3);
-    logLine('fresh mag. ' + this.mags + ' left.');
+    logLine('reloaded. ' + this.mags + ' mags left.');
   }
   shoot() {
     this.shot = TUNE.SHOT_LOCK;
@@ -549,7 +549,7 @@ class Player extends Actor {
       this.x = Math.max(20, back);
       this.y = GROUND;
       this.vy = 0;
-      logLine('you went down into the cut and dragged yourself out.');
+      logLine('fell into the gap and climbed back out.');
       dustBurst(this.x, this.y, 10, 14);
 
       this.hurt(1);
@@ -864,7 +864,7 @@ class Enemy extends Actor {
 
         audio.alarm();
         logLine(
-          '<b>the commander reached a radio.</b> break their line of sight and it dies down.',
+          '<b>commander reached the radio.</b> break line of sight to stop it.',
         );
       }
       return;
@@ -882,13 +882,13 @@ function humanity(p) {
 const TUTORIAL = [
   {
     key: 'move',
-    text: 'A   D   to drag yourself  ·  SPACE  to hop  ·  ESC pause',
+    text: 'A   D   to move around  ·  SPACE  to jump  ·  ESC pause',
     near: () => true,
     done: p => p.hops >= 1 || p.x > 88 || game.fitted >= 1,
   },
   {
     key: 'take',
-    text: 'HOLD  E   to take the leg',
+    text: 'HOLD  E   to attach the leg',
     near: p => game.pickups.some(u => !u.taken && Math.abs(u.x - p.x) < 110),
     done: () => game.fitted >= 1,
   },
@@ -900,21 +900,21 @@ const TUTORIAL = [
   },
   {
     key: 'jump',
-    text: 'two legs now  ·  SPACE reaches the ledge',
+    text: 'two legs now  ·  you can jump onto the ledge',
     near: () => game.fitted >= 1,
 
     done: p => p.y < GROUND - 16,
   },
   {
     key: 'kill',
-    text: 'get behind him, then  J  ·  from behind it is quiet',
+    text: 'get behind him, then  J  ·  attack him',
     near: p =>
       game.enemies.some(f => f.alive && !ENEMY_TYPES[f.type].beast && Math.abs(f.x - p.x) < 120),
     done: () => game.kills >= 1,
   },
   {
     key: 'read',
-    text: 'HUM, bottom left  ·  that is how human you read  ·  low and they look twice as hard',
+    text: 'HUM, bottom left  ·  that is how guards perceive you  ·  low and they look becomed alerted quicker',
 
     near: p => humanity(p) < 72,
     done: (p, seen) => seen > 260,
@@ -922,19 +922,19 @@ const TUTORIAL = [
 
   {
     key: 'gun',
-    text: 'K  fires it  ·  bare, the shot carries the whole zone',
+    text: 'K  fires it',
     near: p => canFire(p) && (p.ammo > 0 || p.mags > 0),
     done: p => p.fired >= 1,
   },
   {
     key: 'can',
-    text: 'sleeve, spring, rag  ·  HOLD C  ·  then it is quiet',
+    text: 'sleeve, spring, rag  ·  HOLD C  ·  then it is silenced',
     near: p => p.canParts.length === CAN_PARTS.length && !p.silencer,
     done: p => p.silencer,
   },
   {
     key: 'cool',
-    text: 'get out of their eyeline and hold  ·  the alarm burns itself out',
+    text: 'get out of their eyeline and hide they will forget about it',
     near: () => game.alarm > 0,
     done: () => game.alarm === 0,
   },
@@ -1199,7 +1199,7 @@ function runKingMove(K, p, ph) {
       if (standing < CONFIG.FENCE_MAX) {
         spawnGuard(900, 1);
         spawnGuard(CONFIG.KING_WALL, -1);
-        logLine('two more from the fence line.');
+        logLine('two more guards coming from the fence.');
       }
       endKingMove(K, TUNE.CD_CALL);
       return;
@@ -1215,16 +1215,16 @@ function takeGear(p, u) {
     p.gun = true;
     p.mags = Math.max(p.mags, 1);
     p.ammo = Math.max(p.ammo, 3);
-    logLine('<b>his sidearm.</b> three rounds in the mag. K fires.');
+    logLine('<b>took his sidearm.</b> three rounds left. K to fire.');
   } else if (u.gear === 'rounds') {
     const got = u.mags || 1;
     p.mags = Math.min(CONFIG.MAGS_MAX, p.mags + got);
-    logLine(got > 1 ? 'two mags off him.' : 'a mag off him.');
+    logLine(got > 1 ? 'got two mags off him.' : 'got a mag off him.');
   } else {
     p.canParts.push(u.gear);
     logLine(
       p.canParts.length === CAN_PARTS.length
-        ? '<b>' + gearDef.name + '.</b> that is all three. hold C.'
+        ? '<b>' + gearDef.name + '.</b> thats all three, hold C.'
         : gearDef.name + '. ' + p.canParts.length + ' of ' + CAN_PARTS.length + '.',
     );
   }
